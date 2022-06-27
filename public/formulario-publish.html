@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar un topic</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script type="text/javascript">
+        let contador = 0;
+
+        function reconectar(){
+            window.location.reload();
+        }
+
+        function enviarMQTT(){
+            if(contador==1){
+                reconectar();
+            }
+            //opciones de coneccion
+            const options = {
+                connectTimeout: 4000,
+                clientId: 'waflon',
+                keepalive: 60,
+                clean: true,
+            }
+            
+            let topic = document.getElementById("idTopic").value;
+            let URL = document.getElementById("idDireccion").value;
+            let puerto = document.getElementById("idPuerto").value;
+            let mensaje = document.getElementById("idMensaje").value;
+
+            const webSocket_URL = 'ws://'+ URL + ':' + puerto + '/mqtt';  //AWS
+            
+            console.log("WebSocket: " + webSocket_URL);
+
+            const client = mqtt.connect(webSocket_URL, options);
+            console.log("MQTT Enviado");
+            client.on('connect', () =>{
+                console.log('Mqtt conectado por WS con éxito!');
+                // publica mensaje
+                client.publish(topic, mensaje, (error) => {
+                    console.log(error || 'Mensaje enviado');
+                });
+            });
+            contador = 1;
+        }
+    </script>
+    
+</head>
+<body>
+
+
+    <form class = "form-horizontal" role = "form" onsubmit="return false">
+        <legend>Formulario Subscripción MQTT</legend>
+        <div class = "form-group">
+            <label class="col-sm-1" for="topic">Topic:</label>
+            <input type="text" class="col-sm-2" name="topic" id="idTopic" value="casa/luz"><br>
+        </div>
+        <div class = "form-group">
+            <label class="col-sm-1" for="direccion">Direccion:</label>
+            <input type="text" class="col-sm-2" name="direccion" id="idDireccion" value="3.232.232.178"><br>
+        </div>
+            
+            <label class="col-sm-1" for="puerto">Puerto:</label>
+            <input type="number" class="col-sm-2" name="puerto" id="idPuerto" value=8083><br>
+            <label class="col-sm-1" for="mensaje">Mensaje:</label>
+            <input type="text" class="col-sm-2" name="mensaje" id="idMensaje" value="1"><br>
+            <button type="submit" class="col-sm-3" name="enviar" id="idEnviar" onclick="enviarMQTT();">Enviar</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
