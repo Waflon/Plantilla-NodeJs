@@ -20,9 +20,12 @@ function encender(){
         // publica mensaje
         client.publish("casa/luz", '1', (error) => {
             console.log(error || 'Mensaje enviado');
-            window.location.reload();
         });
     });
+
+    client.on('close', () => {  // Evita loops infinitos cerrando conexion
+        client.end();
+    })
 }
 
 function apagar(){
@@ -45,8 +48,11 @@ function apagar(){
         // publica mensaje
         client.publish("casa/luz", '0', (error) => {
             console.log(error || 'Mensaje enviado');
-            window.location.reload();
         });
     });
+
+    client.on('close', () => {  // Evita loops infinitos cerrando conexion
+        client.end();
+    })
 }
 

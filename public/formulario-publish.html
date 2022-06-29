@@ -11,16 +11,7 @@
 
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script type="text/javascript">
-        let contador = 0;
-
-        function reconectar(){
-            window.location.reload();
-        }
-
         function enviarMQTT(){
-            if(contador==1){
-                reconectar();
-            }
             //opciones de coneccion
             const options = {
                 connectTimeout: 4000,
@@ -47,7 +38,10 @@
                     console.log(error || 'Mensaje enviado');
                 });
             });
-            contador = 1;
+
+            client.on('close', () => {  // Evita loops infinitos cerrando conexion
+                client.end();
+            })
         }
     </script>
     
