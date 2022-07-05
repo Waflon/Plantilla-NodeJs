@@ -8,7 +8,7 @@ function Enviar(mensaje){
         clean: true,
     }
 
-    const webSocket_URL = 'ws://3.232.232.178:8083/mqtt';  //AWS
+    const webSocket_URL = 'ws://waflon.hopto.org:9001/mqtt';  //AWS
     console.log("WebSocket: " + webSocket_URL);
 
     const client = mqtt.connect(webSocket_URL, options);
@@ -37,7 +37,7 @@ function enviar_final(){
         clean: true,
     }
 
-    const webSocket_URL = 'ws://3.232.232.178:8083/mqtt';  //AWS
+    const webSocket_URL = 'ws://waflon.hopto.org:9001/mqtt';  //AWS
     console.log("WebSocket: " + webSocket_URL);
 
     const client = mqtt.connect(webSocket_URL, options);
